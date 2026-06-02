@@ -14,6 +14,17 @@ function hms_is_pgsql(): bool
     return hms_db_driver() === 'pgsql';
 }
 
+function hms_use_database_sessions(): bool
+{
+    if (hms_is_pgsql()) {
+        return true;
+    }
+
+    $driver = getenv('HMS_SESSION_DRIVER');
+
+    return $driver === 'database' || $driver === 'db';
+}
+
 function hms_table_exists(PDO $db, string $table): bool
 {
     static $cache = [];
