@@ -33,14 +33,29 @@ if (!defined('SA_BASE_URL')) {
 }
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
+    $sessionDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'hms_sessions';
+    if (!is_dir($sessionDir)) {
+        @mkdir($sessionDir, 0775, true);
+    }
+    if (is_dir($sessionDir) && is_writable($sessionDir)) {
+        session_save_path($sessionDir);
+    }
+
     session_name('HMS_SUPERADMIN');
     $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
         || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
         || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
 
-    session_start([
+    $started = session_start([
         'cookie_httponly' => true,
         'cookie_samesite' => 'Lax',
         'cookie_secure'   => $https,
+        'use_strict_mode' => 1,
     ]);
+    if ($started !== true) {
+        http_response_code(500);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo 'Super Admin portal: session initialization failed.';
+        exit;
+    }
 }
