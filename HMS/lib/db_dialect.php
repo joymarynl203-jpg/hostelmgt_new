@@ -14,6 +14,53 @@ function hms_is_pgsql(): bool
     return hms_db_driver() === 'pgsql';
 }
 
+function hms_table_exists(PDO $db, string $table): bool
+{
+    static $cache = [];
+    if (array_key_exists($table, $cache)) {
+        return $cache[$table];
+    }
+
+    if (hms_is_pgsql()) {
+        $stmt = $db->prepare('SELECT to_regclass(?) AS t');
+        $stmt->execute(['public.' . $table]);
+        $row = $stmt->fetch();
+        $cache[$table] = is_array($row) && !empty($row['t']);
+    } else {
+        $stmt = $db->query("SHOW TABLES LIKE " . $db->quote($table));
+        $cache[$table] = (bool) ($stmt && $stmt->fetch());
+    }
+
+    return $cache[$table];
+}
+
+function hms_table_has_column(PDO $db, string $table, string $column): bool
+{
+    static $cache = [];
+    $key = $table . '.' . $column;
+    if (array_key_exists($key, $cache)) {
+        return $cache[$key];
+    }
+
+    if (hms_is_pgsql()) {
+        $stmt = $db->prepare("
+            SELECT 1
+            FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name = ?
+              AND column_name = ?
+            LIMIT 1
+        ");
+        $stmt->execute([$table, $column]);
+        $cache[$key] = (bool) $stmt->fetch();
+    } else {
+        $stmt = $db->query('SHOW COLUMNS FROM `' . str_replace('`', '``', $table) . '` LIKE ' . $db->quote($column));
+        $cache[$key] = (bool) ($stmt && $stmt->fetch());
+    }
+
+    return $cache[$key];
+}
+
 /**
  * Adapt MySQL-oriented SQL for PostgreSQL (string literals, date functions).
  */

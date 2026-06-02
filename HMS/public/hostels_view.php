@@ -12,8 +12,7 @@ require_login();
 $db = hms_db();
 $user = hms_current_user();
 $userId = (int) $user['id'];
-$nearbyColStmt = $db->query("SHOW COLUMNS FROM hostels LIKE 'nearby_institutions'");
-$hasNearbyInstitutions = (bool)$nearbyColStmt->fetch();
+$hasNearbyInstitutions = hms_table_has_column($db, 'hostels', 'nearby_institutions');
 $hasHostelGallery = hms_image_gallery_enabled($db);
 $hasRoomGallery = $hasHostelGallery;
 

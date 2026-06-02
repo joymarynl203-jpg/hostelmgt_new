@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/db_dialect.php';
 require_once __DIR__ . '/helpers.php';
 
 /** Max upload size in bytes (default 5 MB). Override with HMS_UPLOAD_MAX_BYTES in config.local.php. */
@@ -30,8 +31,7 @@ function hms_image_gallery_enabled(PDO $db): bool
     if ($cached !== null) {
         return $cached;
     }
-    $stmt = $db->query("SHOW TABLES LIKE 'hostel_images'");
-    $cached = (bool) $stmt->fetch();
+    $cached = hms_table_exists($db, 'hostel_images');
     return $cached;
 }
 
