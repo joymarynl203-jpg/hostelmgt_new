@@ -1,0 +1,18 @@
+<?php
+/**
+ * Super Admin portal overrides (optional).
+ * Copy to `config.sa.php` in this folder (same level as `lib/` and `public/`).
+ *
+ * HMS database credentials still come from `../HMS/config.local.php` (or HMS defaults).
+ *
+ * Super admin **who may sign in** is defined in `lib/auth_sa.php` (allowed emails + bcrypt password hash).
+ * To add/remove super admins or change the password, edit that file and regenerate the bcrypt hash if needed:
+ *   php -r "echo password_hash('YOUR_NEW_PASSWORD', PASSWORD_DEFAULT);"
+ */
+
+// URL path to this app’s `public/` folder (leading + trailing slash). Examples:
+// - Apache docroot = this `public/` folder  →  '/'
+// - Under XAMPP: http://localhost/hms_superadmin/public/...  →  '/hms_superadmin/public/'
+if (!defined('SA_BASE_URL')) {
+    define('SA_BASE_URL', '/hms_superadmin/public/');
+}

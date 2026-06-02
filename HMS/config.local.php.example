@@ -1,0 +1,51 @@
+<?php
+/**
+ * Production overrides — save as `config.local.php` on the server (same folder as `config.php`).
+ *
+ * Go-live checklist:
+ * - MySQL: create a database and user with a strong password; import `database/schema.sql` if needed.
+ * - Web server: point document root to the `public/` directory (recommended) or keep a subpath and set HMS_BASE_URL.
+ * - HMS_APP_URL: exact public URL with https:// (Pesapal must reach payment_callback.php and payment_ipn.php).
+ * - Pesapal: live consumer key + secret from your merchant dashboard; set HMS_PESAPAL_ENV to live.
+ * - Pesapal IPN: register https://YOUR_DOMAIN/.../payment_ipn.php in the dashboard, paste ipn_id into HMS_PESAPAL_IPN_ID.
+ * - Demo: set HMS_DEMO_SETUP_KEY to '' and delete or block access to public/seed_demo.php.
+ */
+
+define('HMS_DB_HOST', 'localhost');
+define('HMS_DB_NAME', 'hms_production');
+define('HMS_DB_USER', 'hms_app');
+define('HMS_DB_PASS', 'CHANGE_ME_STRONG_PASSWORD');
+
+// If Apache/Nginx document root is `public/`, use '/' here. If app lives under /HMS/public/, match that.
+define('HMS_BASE_URL', '/');
+define('HMS_APP_URL', 'https://hostels.example.ac.ug');
+
+// 'sandbox' = cybqa + official demo keys only. Merchant dashboard keys almost always need 'live'.
+define('HMS_PESAPAL_ENV', 'live');
+define('HMS_PESAPAL_CONSUMER_KEY', 'YOUR_LIVE_CONSUMER_KEY');
+define('HMS_PESAPAL_CONSUMER_SECRET', 'YOUR_LIVE_CONSUMER_SECRET');
+define('HMS_PESAPAL_IPN_ID', '');
+
+define('HMS_DEMO_SETUP_KEY', '');
+
+// Forgot password (students, wardens, university admins): outbound email.
+// Recommended: SMTP (Gmail/Google Workspace, SendGrid, SES, or your university relay).
+// define('HMS_MAIL_TRANSPORT', 'smtp'); // default; use 'php_mail' only if the server mail() relay is reliable.
+// define('HMS_SMTP_HOST', 'smtp.example.com');
+// define('HMS_SMTP_PORT', 587);
+// define('HMS_SMTP_USER', 'smtp_username');
+// define('HMS_SMTP_PASS', 'smtp_password');
+// define('HMS_SMTP_ENCRYPTION', 'tls'); // tls | ssl | none — ssl often uses port 465
+// define('HMS_SMTP_VERIFY_PEER', true); // set false only for broken dev certificates (not recommended in production)
+// define('HMS_MAIL_FROM', 'noreply@example.ac.ug');
+// define('HMS_MAIL_FROM_NAME', 'Hostel Management System');
+// Import database/migrations/008_password_reset_tokens.sql (or use a fresh schema.sql) so reset tokens can be stored.
+
+// Optional: hostel map picker (admin) + embedded maps for students. Enable Maps JavaScript API + Maps Embed API.
+// define('HMS_GOOGLE_MAPS_API_KEY', 'YOUR_BROWSER_RESTRICTED_KEY');
+
+// Footer social links (TikTok and X — set full profile URLs when you have them).
+// define('HMS_SOCIAL_WHATSAPP', '256787221531');
+// define('HMS_SOCIAL_GMAIL', 'shamirah0mar915@gmail.com');
+// define('HMS_SOCIAL_TIKTOK_URL', 'https://www.tiktok.com/@yourhandle');
+// define('HMS_SOCIAL_X_URL', 'https://x.com/yourhandle');
