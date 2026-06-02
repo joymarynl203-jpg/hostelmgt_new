@@ -151,6 +151,14 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
 CREATE INDEX IF NOT EXISTS idx_prt_user ON password_reset_tokens (user_id);
 CREATE INDEX IF NOT EXISTS idx_prt_expires ON password_reset_tokens (expires_at);
 
+-- PHP sessions (CSRF, login) — required on Render so sessions survive container restarts
+CREATE TABLE IF NOT EXISTS hms_sessions (
+    id VARCHAR(128) PRIMARY KEY,
+    data TEXT NOT NULL,
+    last_activity TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_hms_sessions_activity ON hms_sessions (last_activity);
+
 INSERT INTO users (name, email, password_hash, role, is_active)
 VALUES
     ('Super Admin 1', 'shamirah0mar915@gmail.com', '$2y$10$ZDVqhQpI03/CGwQnu5Ut4.Es1n6Xa/zVzvn/EUPV.5OcAegU4QGnW', 'super_admin', 1),

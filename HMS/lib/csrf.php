@@ -13,9 +13,9 @@ function csrf_token(): string
 function csrf_verify(string $token): void
 {
     $current = $_SESSION['csrf_token'] ?? '';
-    if (!$token || !hash_equals($current, $token)) {
+    if (!$token || $current === '' || !hash_equals($current, $token)) {
         http_response_code(419);
-        echo 'CSRF verification failed.';
+        echo 'CSRF verification failed. Please refresh the page and try again.';
         exit;
     }
 }
