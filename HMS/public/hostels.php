@@ -18,7 +18,7 @@ $institutionFilter = trim((string)($_GET['institution'] ?? ''));
 $isStudent = ($user['role'] === 'student');
 $hasSearchCriteria = $search !== '' || ($hasNearbyInstitutions && $institutionFilter !== '');
 if ($hasNearbyInstitutions) {
-    $instOptions = $db->query('
+    $instOptions = $db->query("
         SELECT institution_name
         FROM (
             SELECT DISTINCT TRIM(institution) AS institution_name
@@ -30,14 +30,14 @@ if ($hasNearbyInstitutions) {
             WHERE nearby_institutions IS NOT NULL AND TRIM(nearby_institutions) <> ''
         ) x
         ORDER BY institution_name ASC
-    ')->fetchAll();
+    ")->fetchAll();
 } else {
-    $instOptions = $db->query('
+    $instOptions = $db->query("
         SELECT DISTINCT TRIM(institution) AS institution_name
         FROM users
         WHERE institution IS NOT NULL AND TRIM(institution) <> ''
         ORDER BY institution_name ASC
-    ')->fetchAll();
+    ")->fetchAll();
 }
 
 // Role-based visibility.
