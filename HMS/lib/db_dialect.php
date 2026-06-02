@@ -70,10 +70,11 @@ function hms_adapt_sql(string $sql): string
         return $sql;
     }
 
-    $sql = preg_replace('/=\s*"([a-z][a-z0-9_]*)"/i', "='$1'", $sql);
-    $sql = preg_replace('/,\s*"([a-z][a-z0-9_]*)"/i', ", '$1'", $sql);
-    $sql = preg_replace('/\(\s*"([a-z][a-z0-9_]*)"/i', "('$1'", $sql);
-    $sql = preg_replace('/\s+"([a-z][a-z0-9_]*)"\s*,/i', " '$1',", $sql);
+    $sql = preg_replace(
+        '/GROUP_CONCAT\s*\(\s*(.+?)\s+ORDER BY\s+(.+?)\s+SEPARATOR\s+", "\s*\)/is',
+        "STRING_AGG($1, ', ' ORDER BY $2)",
+        $sql
+    );
 
     $sql = preg_replace(
         '/DATE_SUB\s*\(\s*NOW\s*\(\s*\)\s*,\s*INTERVAL\s+(\d+)\s+MINUTE\s*\)/i',
@@ -95,11 +96,8 @@ function hms_adapt_sql(string $sql): string
 
     $sql = str_ireplace('UTC_TIMESTAMP()', "(NOW() AT TIME ZONE 'utc')", $sql);
 
-    $sql = preg_replace(
-        '/GROUP_CONCAT\s*\(\s*(.+?)\s+ORDER BY\s+(.+?)\s+SEPARATOR\s+", "\s*\)/is',
-        "STRING_AGG($1, ', ' ORDER BY $2)",
-        $sql
-    );
+    // MySQL-style "string" literals (including "") -> PostgreSQL 'string'
+    $sql = preg_replace('/"([^"]*)"/', "'$1'", $sql);
 
     return $sql;
 }

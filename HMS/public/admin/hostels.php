@@ -295,7 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $wardens = $db->query('SELECT id, name, email FROM users WHERE role = "warden" ORDER BY name ASC')->fetchAll();
-$institutionOptions = $db->query('SELECT DISTINCT TRIM(institution) AS institution FROM users WHERE institution IS NOT NULL AND TRIM(institution) <> "" ORDER BY institution ASC')->fetchAll();
+$institutionOptions = $db->query("SELECT DISTINCT TRIM(institution) AS institution FROM users WHERE institution IS NOT NULL AND TRIM(institution) <> '' ORDER BY institution ASC")->fetchAll();
 
 if ($role === 'warden') {
     $hostels = $db->prepare('

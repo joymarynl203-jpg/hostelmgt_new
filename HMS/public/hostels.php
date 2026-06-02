@@ -23,11 +23,11 @@ if ($hasNearbyInstitutions) {
         FROM (
             SELECT DISTINCT TRIM(institution) AS institution_name
             FROM users
-            WHERE institution IS NOT NULL AND TRIM(institution) <> ""
+            WHERE institution IS NOT NULL AND TRIM(institution) <> ''
             UNION
             SELECT DISTINCT TRIM(nearby_institutions) AS institution_name
             FROM hostels
-            WHERE nearby_institutions IS NOT NULL AND TRIM(nearby_institutions) <> ""
+            WHERE nearby_institutions IS NOT NULL AND TRIM(nearby_institutions) <> ''
         ) x
         ORDER BY institution_name ASC
     ')->fetchAll();
@@ -35,7 +35,7 @@ if ($hasNearbyInstitutions) {
     $instOptions = $db->query('
         SELECT DISTINCT TRIM(institution) AS institution_name
         FROM users
-        WHERE institution IS NOT NULL AND TRIM(institution) <> ""
+        WHERE institution IS NOT NULL AND TRIM(institution) <> ''
         ORDER BY institution_name ASC
     ')->fetchAll();
 }
@@ -52,7 +52,7 @@ if ($user['role'] === 'warden') {
     $params = [$userId];
     if ($search !== '') {
         $searchExpr = $hasNearbyInstitutions
-            ? '(h.name LIKE ? OR h.location LIKE ? OR COALESCE(h.nearby_institutions, "") LIKE ?)'
+            ? '(h.name LIKE ? OR h.location LIKE ? OR COALESCE(h.nearby_institutions, \'\') LIKE ?)'
             : '(h.name LIKE ? OR h.location LIKE ?)';
         $sql .= ' AND ' . $searchExpr;
         $term = '%' . $search . '%';
@@ -63,7 +63,7 @@ if ($user['role'] === 'warden') {
         }
     }
     if ($hasNearbyInstitutions && $institutionFilter !== '') {
-        $sql .= ' AND COALESCE(h.nearby_institutions, "") LIKE ?';
+        $sql .= ' AND COALESCE(h.nearby_institutions, \'\') LIKE ?';
         $params[] = '%' . $institutionFilter . '%';
     }
     $sql .= '
@@ -83,7 +83,7 @@ if ($user['role'] === 'warden') {
     $params = [];
     if ($search !== '') {
         $searchExpr = $hasNearbyInstitutions
-            ? '(h.name LIKE ? OR h.location LIKE ? OR COALESCE(h.nearby_institutions, "") LIKE ?)'
+            ? '(h.name LIKE ? OR h.location LIKE ? OR COALESCE(h.nearby_institutions, \'\') LIKE ?)'
             : '(h.name LIKE ? OR h.location LIKE ?)';
         $sql .= ' AND ' . $searchExpr;
         $term = '%' . $search . '%';
@@ -94,7 +94,7 @@ if ($user['role'] === 'warden') {
         }
     }
     if ($hasNearbyInstitutions && $institutionFilter !== '') {
-        $sql .= ' AND COALESCE(h.nearby_institutions, "") LIKE ?';
+        $sql .= ' AND COALESCE(h.nearby_institutions, \'\') LIKE ?';
         $params[] = '%' . $institutionFilter . '%';
     }
     $sql .= ' ORDER BY h.is_active DESC, h.name ASC';
@@ -117,7 +117,7 @@ if ($user['role'] === 'warden') {
         $params = [];
         if ($search !== '') {
             $searchExpr = $hasNearbyInstitutions
-                ? '(h.name LIKE ? OR h.location LIKE ? OR COALESCE(h.nearby_institutions, "") LIKE ?)'
+                ? '(h.name LIKE ? OR h.location LIKE ? OR COALESCE(h.nearby_institutions, \'\') LIKE ?)'
                 : '(h.name LIKE ? OR h.location LIKE ?)';
             $sql .= ' AND ' . $searchExpr;
             $term = '%' . $search . '%';
@@ -128,7 +128,7 @@ if ($user['role'] === 'warden') {
             }
         }
         if ($hasNearbyInstitutions && $institutionFilter !== '') {
-            $sql .= ' AND COALESCE(h.nearby_institutions, "") LIKE ?';
+            $sql .= ' AND COALESCE(h.nearby_institutions, \'\') LIKE ?';
             $params[] = '%' . $institutionFilter . '%';
         }
         $sql .= ' ORDER BY h.name ASC';
