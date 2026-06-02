@@ -92,6 +92,7 @@ function hms_apply_env_config(): void
         'HMS_PESAPAL_IPN_ID'        => 'HMS_PESAPAL_IPN_ID',
         'HMS_GOOGLE_MAPS_API_KEY'   => 'HMS_GOOGLE_MAPS_API_KEY',
         'HMS_DEMO_SETUP_KEY'        => 'HMS_DEMO_SETUP_KEY',
+        'HMS_DB_SETUP_KEY'          => 'HMS_DB_SETUP_KEY',
         'HMS_MAIL_TRANSPORT'        => 'HMS_MAIL_TRANSPORT',
         'HMS_SMTP_HOST'             => 'HMS_SMTP_HOST',
         'HMS_SMTP_USER'             => 'HMS_SMTP_USER',

@@ -78,6 +78,11 @@ if (!defined('HMS_DEMO_SETUP_KEY')) {
     define('HMS_DEMO_SETUP_KEY', 'hms-demo-setup-2026');
 }
 
+/** Non-empty enables one-time DB schema at public/db_setup.php — use empty string after tables are created. */
+if (!defined('HMS_DB_SETUP_KEY')) {
+    define('HMS_DB_SETUP_KEY', 'hms-db-setup-2026');
+}
+
 /**
  * Outbound email for forgot-password and similar.
  * Transport: smtp (recommended) requires HMS_SMTP_HOST; php_mail uses PHP mail().
