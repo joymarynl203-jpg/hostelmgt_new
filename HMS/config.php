@@ -12,6 +12,9 @@ if (is_file(__DIR__ . '/config.local.php')) {
 require_once __DIR__ . '/lib/env_config.php';
 hms_apply_env_config();
 
+if (!defined('HMS_DB_DRIVER')) {
+    define('HMS_DB_DRIVER', 'mysql');
+}
 if (!defined('HMS_DB_HOST')) {
     define('HMS_DB_HOST', 'localhost');
 }
@@ -23,6 +26,22 @@ if (!defined('HMS_DB_USER')) {
 }
 if (!defined('HMS_DB_PASS')) {
     define('HMS_DB_PASS', '');
+}
+if (!defined('HMS_DB_PORT')) {
+    define('HMS_DB_PORT', 3306);
+}
+/** Enable for cloud MySQL (PlanetScale, Aiven, Railway). Set HMS_DB_SSL=1 on Render. */
+if (!defined('HMS_DB_SSL')) {
+    define('HMS_DB_SSL', false);
+}
+if (!defined('HMS_DB_SSL_VERIFY')) {
+    define('HMS_DB_SSL_VERIFY', true);
+}
+if (!defined('HMS_DB_SSL_CA')) {
+    define('HMS_DB_SSL_CA', '');
+}
+if (!defined('HMS_DB_SSLMODE')) {
+    define('HMS_DB_SSLMODE', '');
 }
 
 /** Web path to `public/` (leading slash, trailing slash). On production often `/` if the vhost root is `public/`. */

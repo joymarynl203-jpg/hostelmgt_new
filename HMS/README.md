@@ -15,7 +15,7 @@ This project implements an **enhanced web-based Hostel Management System** for o
 - **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
 
 ### Deploy on Render
-See **[DEPLOY_RENDER.md](../DEPLOY_RENDER.md)** at the repo root (Dockerfile + external MySQL required).
+See **[DEPLOY_RENDER.md](../DEPLOY_RENDER.md)** at the repo root (Docker + **Render PostgreSQL** recommended).
 
 ### Getting Started
 1. Create a MySQL database, e.g. `hms_db`.
