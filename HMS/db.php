@@ -106,7 +106,16 @@ function hms_db(): PDO
     try {
         $pdo = new HMS_PDO($dsn, HMS_DB_USER, HMS_DB_PASS, $options);
     } catch (PDOException $e) {
-        error_log('HMS DB connection failed [' . hms_db_driver() . ' ' . HMS_DB_HOST . '/' . HMS_DB_NAME . ']: ' . $e->getMessage());
+        $msg = $e->getMessage();
+        if (hms_is_pgsql() && str_contains($msg, 'could not translate host name')
+            && str_starts_with((string) HMS_DB_HOST, 'dpg-') && !str_contains((string) HMS_DB_HOST, '.')) {
+            error_log(
+                'HMS DB hint: hostname "' . HMS_DB_HOST . '" is Render internal-only. '
+                . 'In Render Postgres → Connect, copy the External Database URL '
+                . '(host ends with e.g. .oregon-postgres.render.com) into DATABASE_URL.'
+            );
+        }
+        error_log('HMS DB connection failed [' . hms_db_driver() . ' ' . HMS_DB_HOST . '/' . HMS_DB_NAME . ']: ' . $msg);
 
         http_response_code(500);
         $debug = getenv('HMS_DEBUG');

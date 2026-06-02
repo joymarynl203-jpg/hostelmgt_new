@@ -19,9 +19,17 @@ psql "YOUR_EXTERNAL_DATABASE_URL" -f HMS/database/schema.postgresql.sql
 
 Or use Render’s **PSQL** shell from the database page and paste the contents of `schema.postgresql.sql`.
 
-### 3. Web service environment
+### 3. Web service environment — use **External** Database URL
 
-If you link the database to the web service, Render sets **`DATABASE_URL`** automatically. You only need:
+In Render → your **PostgreSQL** → **Connect**, copy the **External Database URL** (not Internal).
+
+The host must look like `dpg-xxxxx-a.oregon-postgres.render.com` (with a dot and region), **not** only `dpg-xxxxx-a`.
+
+Set that full string as `DATABASE_URL` on the web service (or link the database and replace `DATABASE_URL` if the internal host fails).
+
+If you link the database to the web service, Render may inject an internal URL. If you see `could not translate host name "dpg-....-a"`, switch to the **External** URL below.
+
+You also need:
 
 | Variable | Value |
 |----------|--------|
