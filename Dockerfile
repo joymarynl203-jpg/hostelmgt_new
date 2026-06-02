@@ -19,6 +19,11 @@ COPY hms_superadmin ./hms_superadmin
 # Do not bake local secrets into the image
 RUN rm -f ./HMS/config.local.php ./hms_superadmin/config.sa.php
 
+# Upload dirs must be writable by Apache (www-data)
+RUN mkdir -p /var/www/html/HMS/public/uploads/hostels /var/www/html/HMS/public/uploads/rooms \
+    && chown -R www-data:www-data /var/www/html/HMS/public/uploads \
+    && chmod -R 775 /var/www/html/HMS/public/uploads
+
 EXPOSE 8080
 
 ENTRYPOINT ["/usr/local/bin/hms-entrypoint.sh"]

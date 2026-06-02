@@ -25,6 +25,23 @@ function hms_uploads_base_dir(): string
     return dirname(__DIR__) . '/public/uploads';
 }
 
+/** Create upload directory tree with permissions suitable for Apache www-data. */
+function hms_ensure_upload_dir(string $dir): bool
+{
+    if (is_dir($dir) && is_writable($dir)) {
+        return true;
+    }
+
+    if (!is_dir($dir)) {
+        if (!@mkdir($dir, 0775, true) && !is_dir($dir)) {
+            return false;
+        }
+        @chmod($dir, 0775);
+    }
+
+    return is_dir($dir) && is_writable($dir);
+}
+
 function hms_image_gallery_enabled(PDO $db): bool
 {
     static $cached = null;
@@ -132,13 +149,15 @@ function hms_upload_image(array $file, string $category): array
 
     $ext = $allowed[$mime];
     $dir = hms_uploads_base_dir() . '/' . $category;
-    if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
-        return ['ok' => false, 'error' => 'Unable to create upload directory.'];
+    if (!hms_ensure_upload_dir($dir)) {
+        return ['ok' => false, 'error' => 'Upload folder is not writable on the server. Contact the administrator.'];
     }
 
     $filename = bin2hex(random_bytes(16)) . '.' . $ext;
     $dest = $dir . '/' . $filename;
-    if (!move_uploaded_file($tmp, $dest)) {
+    if (!@move_uploaded_file($tmp, $dest)) {
+        error_log('HMS upload failed: cannot write to ' . $dest);
+
         return ['ok' => false, 'error' => 'Unable to save uploaded image.'];
     }
 

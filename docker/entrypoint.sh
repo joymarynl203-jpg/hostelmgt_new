@@ -14,4 +14,10 @@ if [ -f /etc/apache2/sites-available/000-default.conf ]; then
     sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 fi
 
+# Ensure upload directories exist and are writable after each container start (Render).
+UPLOAD_ROOT="/var/www/html/HMS/public/uploads"
+mkdir -p "${UPLOAD_ROOT}/hostels" "${UPLOAD_ROOT}/rooms"
+chown -R www-data:www-data "${UPLOAD_ROOT}"
+chmod -R 775 "${UPLOAD_ROOT}"
+
 exec "$@"
