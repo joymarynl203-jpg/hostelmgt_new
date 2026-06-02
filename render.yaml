@@ -1,0 +1,30 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# MySQL is not hosted on Render; provision an external database and set HMS_DB_* below.
+services:
+  - type: web
+    name: hostelmgt
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: HMS_BASE_URL
+        value: /
+      - key: SA_BASE_URL
+        value: /superadmin/
+      - key: HMS_DEMO_SETUP_KEY
+        value: ""
+      - key: HMS_DB_HOST
+        sync: false
+      - key: HMS_DB_NAME
+        sync: false
+      - key: HMS_DB_USER
+        sync: false
+      - key: HMS_DB_PASS
+        sync: false
+      - key: HMS_PESAPAL_ENV
+        value: sandbox
+      - key: HMS_PESAPAL_CONSUMER_KEY
+        sync: false
+      - key: HMS_PESAPAL_CONSUMER_SECRET
+        sync: false

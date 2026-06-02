@@ -24,7 +24,12 @@ if (is_file(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config.sa.php')) {
 }
 
 if (!defined('SA_BASE_URL')) {
-    define('SA_BASE_URL', '/hms_superadmin/public/');
+    $saBase = getenv('SA_BASE_URL');
+    if ($saBase !== false && $saBase !== '') {
+        define('SA_BASE_URL', $saBase);
+    } else {
+        define('SA_BASE_URL', '/hms_superadmin/public/');
+    }
 }
 
 if (session_status() !== PHP_SESSION_ACTIVE) {

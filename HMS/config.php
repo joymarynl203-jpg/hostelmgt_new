@@ -9,6 +9,9 @@ if (is_file(__DIR__ . '/config.local.php')) {
     require __DIR__ . '/config.local.php';
 }
 
+require_once __DIR__ . '/lib/env_config.php';
+hms_apply_env_config();
+
 if (!defined('HMS_DB_HOST')) {
     define('HMS_DB_HOST', 'localhost');
 }

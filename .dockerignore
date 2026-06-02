@@ -1,0 +1,9 @@
+.git
+.gitignore
+**/.DS_Store
+**/config.local.php
+**/config.sa.php
+HMS/README.md
+DEPLOY_RENDER.md
+*.md
+!HMS/README.md
